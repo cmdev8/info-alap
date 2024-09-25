@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.js"></script>
+</head>
+
+<body>
+  <div x-data="app">
+    <div class="flex">
+      <div class="cursor-pointer p-2 m-2 bg-green-100" @click="visit('/')">Kezdolap</div>
+      <div class="cursor-pointer p-2 m-2 bg-green-100" @click="visit('/uzenetek')">Uzenetek</div>
+      <div class="cursor-pointer p-2 m-2 bg-green-100" @click="visit('/falu')">Falu osszetetele</div>
+      <div class="cursor-pointer p-2 m-2 bg-green-100" @click="visit('/admin')">Admin</div>
+    </div>
+    
+    <div>
+      <h1>Egy falu (meg nem tudjuk melyik)</h1>
+    </div>
+    <hr />
+
+    <template x-if="isActivePage('/')">
+      <div>Kezdolap tartalom</div>
+    </template>
+    <template x-if="isActivePage('/uzenetek')">
+      <div>
+        Uj uzenet kuldes
+        <div class="flex flex-col">
+          <div>
+            <label for="formName">Nev</label>
+            <input type="text" x-model="formName" id="formName"/>
+          </div>
+          <div>
+            <label for="formName">Uzenet</label>
+            <textarea x-model="formMessage"></textarea>
+          </div>
+
+          <div>
+            <button class="cursor-pointer bg-green-100" @click="sendMessage">kuldes</button>
+          </div>
+
+          <div x-text="formResultMessage"></div>
+        </div>
+      </div>
+    </template>
+
+    <template x-if="isActivePage('/falu')">
+      <div>Falu</div>
+    </template>
+
+    <template x-if="isActivePage('/admin')">
+      <div>
+        bejovo uzenetek:
+        <template x-for="item in messages">
+          <div>
+            <div x-text="item.name"></div>
+            <div x-text="item.message"></div>
+            <hr>
+          </div>
+        </template>
+      </div>
+    </template>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
