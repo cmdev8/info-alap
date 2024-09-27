@@ -31,18 +31,101 @@
               class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2"
               @click="visit('/uzenetek')"
             >
-              Uzenetek
+              Üzenet küldés
             </div>
 
             <div
               class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2"
-              @click="visit('/admin')"
+              @click="visit('/login')"
+              x-show="!adminLoggedIn"
             >
-              Admin
+              Belépés
+            </div>
+
+            <div
+              class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2"
+              @click="logout"
+              x-show="adminLoggedIn"
+            >
+              Kilépés
             </div>
           </div>
         </div>
 
+        <template x-if="isActivePage('/login')">
+          <div class="mt-12 px-24">
+            <div class="flex flex-col justify-center px-6 py-12 lg:px-8">
+              <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+                <h2
+                  class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+                >
+                  Belépés
+                </h2>
+                <div class="text-gray-400 text-sm text-center w-full">
+                  (admin@example.com / 123456)
+                </div>
+              </div>
+
+              <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+                <div class="space-y-6" action="#" method="POST">
+                  <div>
+                    <label
+                      for="email"
+                      class="block text-sm font-medium leading-6 text-gray-900"
+                      >Email</label
+                    >
+                    <div class="mt-2">
+                      <input
+                        x-model="loginEmail"
+                        id="email"
+                        name="email"
+                        type="email"
+                        autocomplete="email"
+                        required
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="flex items-center justify-between">
+                      <label
+                        for="password"
+                        class="block text-sm font-medium leading-6 text-gray-900"
+                        >Jelszó</label
+                      >
+                    </div>
+                    <div class="mt-2">
+                      <input
+                        x-model="loginPassword"
+                        id="password"
+                        name="password"
+                        type="password"
+                        autocomplete="current-password"
+                        required
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div
+                      x-show="loginError != ''"
+                      x-text="loginError"
+                      class="border-red-500 border rounded p-2 my-2 text-red-800"
+                    ></div>
+                    <button
+                      @click="login"
+                      class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                      Belépés
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
         <template x-if="isActivePage('/')">
           <div class="mt-12 px-24">
             <div
@@ -93,46 +176,115 @@
         </template>
 
         <template x-if="isActivePage('/uzenetek')">
-          <div>
-            Uj uzenet kuldes
-            <div class="flex flex-col">
-              <div>
-                <label for="formName">Nev</label>
-                <input type="text" x-model="formName" id="formName" />
-              </div>
-              <div>
-                <label for="formName">Uzenet</label>
-                <textarea x-model="formMessage"></textarea>
-              </div>
+          <div class="mt-12 px-24">
+            <div class="space-y-12">
+              <div class="border-b border-gray-900/10 pb-12">
+                <h2 class="text-base font-semibold leading-7 text-gray-900">
+                  Üzenet küldés
+                </h2>
+                <p class="mt-1 text-sm leading-6 text-gray-600">
+                  Az üzenetek csak memóriában tárolódnak.
+                </p>
 
-              <div>
-                <button
-                  class="cursor-pointer bg-green-100"
-                  @click="sendMessage"
+                <div
+                  class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
                 >
-                  kuldes
-                </button>
-              </div>
+                  <div class="col-span-full">
+                    <label
+                      for="name"
+                      class="block text-sm font-medium leading-6 text-gray-900"
+                      >Név</label
+                    >
+                    <div class="mt-2">
+                      <input
+                        type="text"
+                        x-model="formName"
+                        autocomplete="name"
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        placeholder="John Doe"
+                      />
+                    </div>
+                  </div>
 
+                  <div class="col-span-full">
+                    <label
+                      for="message"
+                      class="block text-sm font-medium leading-6 text-gray-900"
+                      >Üzenet</label
+                    >
+                    <div class="mt-2">
+                      <textarea
+                        x-model="formMessage"
+                        id="message"
+                        name="message"
+                        rows="3"
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 flex items-center justify-end gap-x-6">
               <div x-text="formResultMessage"></div>
+              <button
+                type="submit"
+                @click="sendMessage"
+                class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Üzenet küldés
+              </button>
             </div>
           </div>
         </template>
 
-        <template x-if="isActivePage('/falu')">
-          <div>Falu</div>
-        </template>
-
         <template x-if="isActivePage('/admin')">
-          <div>
-            bejovo uzenetek:
-            <template x-for="item in messages">
-              <div>
-                <div x-text="item.name"></div>
-                <div x-text="item.message"></div>
-                <hr />
-              </div>
-            </template>
+          <div class="mt-12 px-24">
+            <div
+              class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100"
+            >
+              Kapcsolat
+            </div>
+            <ul>
+              <template x-for="item in messages">
+                <li role="list" class="divide-y divide-gray-100">
+                  <div class="flex gap-x-4 py-5">
+                    <div
+                      class="h-12 w-12 flex-none rounded-full bg-gray-50"
+                      alt=""
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="{1.5}"
+                        stroke="currentColor"
+                        className="size-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                        />
+                      </svg>
+                    </div>
+                    <div class="flex-auto">
+                      <div class="flex items-baseline justify-between gap-x-4">
+                        <p
+                          class="text-sm font-semibold leading-6 text-gray-900"
+                          x-text="item.name"
+                        ></p>
+                      </div>
+                      <p
+                        class="mt-1 line-clamp-2 text-sm leading-6 text-gray-600"
+                        x-text="item.message"
+                      ></p>
+                    </div>
+                  </div>
+                </li>
+              </template>
+            </ul>
           </div>
         </template>
       </div>
