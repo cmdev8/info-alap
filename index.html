@@ -49,6 +49,14 @@
             </div>
 
             <div
+            class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2"
+            @click="visit('/lista')"
+            x-show="!adminLoggedIn"
+          >
+            Árlista 
+          </div>
+
+            <div
               class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2"
               @click="visit('/login')"
               x-show="!adminLoggedIn"
@@ -162,7 +170,7 @@
                 <path
                   d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
                   stroke-width="0"
-                />
+                >
               </svg>
               <rect
                 width="100%"
@@ -552,6 +560,55 @@
           </div>
         </template>
 
+        <template x-if="isActivePage('/admin')">
+          <div class="mt-12 px-24">
+            <div
+              class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100"
+            >
+              Kapcsolat
+            </div>
+            <ul>
+              <template x-for="item in messages">
+                <li role="list" class="divide-y divide-gray-100">
+                  <div class="flex gap-x-4 py-5">
+                    <div
+                      class="h-12 w-12 flex-none rounded-full bg-gray-50"
+                      alt=""
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="{1.5}"
+                        stroke="currentColor"
+                        className="size-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                        />
+                      </svg>
+                    </div>
+                    <div class="flex-auto">
+                      <div class="flex items-baseline justify-between gap-x-4">
+                        <p
+                          class="text-sm font-semibold leading-6 text-gray-900"
+                          x-text="item.name"
+                        ></p>
+                      </div>
+                      <p
+                        class="mt-1 line-clamp-2 text-sm leading-6 text-gray-600"
+                        x-text="item.message"
+                      ></p>
+                    </div>
+                  </div>
+                </li>
+              </template>
+       
+            </ul>
+          </div>
+        </template>
         <template x-if="isActivePage('/team')">
           <div class="mt-12 px-24">
             <div class="border-b border-gray-900/10 pb-12">
@@ -561,6 +618,7 @@
                     <h2
                       class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
                     >
+                  
                       A Csapat
                     </h2>
                     <p class="mt-6 text-lg leading-8 text-gray-600">
@@ -625,56 +683,89 @@
               </div>
             </div>
           </div>
-        </template>
-
-        <template x-if="isActivePage('/admin')">
+  </template>
+        <template x-if="isActivePage('/lista')">
           <div class="mt-12 px-24">
-            <div
-              class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100"
-            >
-              Kapcsolat
-            </div>
-            <ul>
-              <template x-for="item in messages">
-                <li role="list" class="divide-y divide-gray-100">
-                  <div class="flex gap-x-4 py-5">
-                    <div
-                      class="h-12 w-12 flex-none rounded-full bg-gray-50"
-                      alt=""
+            <div class="border-b border-gray-900/10 pb-12">
+              <div class="bg-white py-24 sm:py-32">
+                <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                  <div class="mx-auto max-w-2xl lg:mx-0">
+                    <h2
+                      class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="{1.5}"
-                        stroke="currentColor"
-                        className="size-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                        />
-                      </svg>
-                    </div>
-                    <div class="flex-auto">
-                      <div class="flex items-baseline justify-between gap-x-4">
-                        <p
-                          class="text-sm font-semibold leading-6 text-gray-900"
-                          x-text="item.name"
-                        ></p>
-                      </div>
-                      <p
-                        class="mt-1 line-clamp-2 text-sm leading-6 text-gray-600"
-                        x-text="item.message"
-                      ></p>
-                    </div>
+                      Árlistánk
+                    </h2>
+                    <p class="mt-6 text-lg leading-8 text-gray-600">
+                      Magas színvonal, elérhető áron!
+                    </p>
                   </div>
-                </li>
-              </template>
-            </ul>
+                  <ul
+                    role="list"
+                    class="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+                  >
+                    <li>
+                      <h3
+                        class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900"
+                      >
+                        Anita
+                      </h3>
+                      <h3
+                      class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900"
+                      >
+                      Főbb területei: Word, Exel
+                    </h3>
+                      <p class="text-base leading-7 text-gray-600">
+                       Online konzultációja 7000 Ft/óra
+                      </p>
+                      <p class="text-base leading-7 text-gray-600">
+                        Személyes konzultációja 8000 Ft/óra + utazási költség
+                       </p>
+                    </li>
+
+                    <li>
+                      <h3
+                        class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900"
+                      >
+                        Adri
+                      </h3>
+                      <h3
+                      class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900"
+                    >  
+                    Főbb területei: Online űrlapok/hivatalos dokumentációk, Kép szerkesztés
+                    </h3>
+                      <p class="text-base leading-7 text-gray-600">
+                        Online konzultációja 7000 Ft/óra
+                      </p>
+                      <p class="text-base leading-7 text-gray-600"></p>
+                        Személyes konzultációja 8000 Ft/óra + utazási költség
+                      </p>
+                    </li>
+
+                    <li>
+                      <h3
+                        class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900"
+                      >
+                        Milan
+                      </h3>
+                      <h3
+                      class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900"
+                    >
+                      Főbb területei: Web fejlesztés, Programozás
+                    </h3>
+                      <p class="text-base leading-7 text-gray-600">
+                        Online konzultációja 10.000 Ft/óra
+                      </p>
+                      <p class="text-base leading-7 text-gray-600"></p>
+                        Személyes konzultációja 12.000 Ft/óra + utazási költség
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </template>
+
       </div>
     </div>
 
