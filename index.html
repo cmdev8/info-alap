@@ -1,183 +1,126 @@
 <!DOCTYPE html>
 <html lang="hu">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.js"
-    ></script>
-  </head>
 
-  <body>
-    <div class="bg-zinc-50 w-full min-h-screen" x-data="app">
-      <div
-        class="bg-white mx-auto max-w-screen-xl min-h-screen border-x-zinc-100 border-x py-8"
-      >
-        <div class="flex">
-          <div
-            class="flex justify-around shadow-md mx-auto rounded-full px-4 border border-zinc-100"
-          >
-            <div
-              class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2"
-              @click="visit('/')"
-            >
-              Kezdőlap
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informatika</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.js"></script>
+</head>
+
+<body>
+  <div class="bg-zinc-50 w-full min-h-screen" x-data="app">
+    <div class="bg-white mx-auto max-w-screen-xl min-h-screen border-x-zinc-100 border-x py-8">
+      <div class="flex">
+        <div class="flex justify-around shadow-md mx-auto rounded-full px-4 border border-zinc-100">
+          <div class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2" @click="visit('/')">
+            Kezdőlap
+          </div>
+
+          <div class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2" @click="visit('/team')">
+            Csapat
+          </div>
+
+          <div class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2" @click="visit('/blog')">
+            Blog
+          </div>
+
+          <div class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2" @click="visit('/uzenetek')">
+            Üzenet küldés
+          </div>
+
+          <div class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2" @click="visit('/lista')"
+            x-show="!adminLoggedIn">
+            Árlista
+          </div>
+
+          <div class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2" @click="visit('/login')"
+            x-show="!adminLoggedIn">
+            Belépés
+          </div>
+
+
+          <div class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2" @click="visit('/admin')"
+            x-show="adminLoggedIn">
+            Admin
+          </div>
+
+          <div class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2" @click="logout"
+            x-show="adminLoggedIn">
+            Kilépés
+          </div>
+        </div>
+      </div>
+
+      <template x-if="isActivePage('/login')">
+        <div class="mt-12 px-24">
+          <div class="flex flex-col justify-center px-6 py-12 lg:px-8">
+            <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+              <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                Belépés
+              </h2>
+              <div class="text-gray-400 text-sm text-center w-full">
+                (admin@example.com / 123456)
+              </div>
             </div>
 
-            <div
-              class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2"
-              @click="visit('/team')"
-            >
-              Csapat
-            </div>
+            <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+              <div class="space-y-6" action="#" method="POST">
+                <div>
+                  <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
+                  <div class="mt-2">
+                    <input x-model="loginEmail" id="email" name="email" type="email" autocomplete="email" required
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                  </div>
+                </div>
 
-            <div
-              class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2"
-              @click="visit('/blog')"
-            >
-              Blog
-            </div>
+                <div>
+                  <div class="flex items-center justify-between">
+                    <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Jelszó</label>
+                  </div>
+                  <div class="mt-2">
+                    <input x-model="loginPassword" id="password" name="password" type="password"
+                      autocomplete="current-password" required
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                  </div>
+                </div>
 
-            <div
-              class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2"
-              @click="visit('/uzenetek')"
-            >
-              Üzenet küldés
-            </div>
-
-            <div
-              class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2"
-              @click="visit('/login')"
-              x-show="!adminLoggedIn"
-            >
-              Belépés
-            </div>
-
-            <div
-              class="text-gray-600 hover:text-teal-400 cursor-pointer px-4 py-2"
-              @click="logout"
-              x-show="adminLoggedIn"
-            >
-              Kilépés
+                <div>
+                  <div x-show="loginError != ''" x-text="loginError"
+                    class="border-red-500 border rounded p-2 my-2 text-red-800"></div>
+                  <button @click="login"
+                    class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    Belépés
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        <template x-if="isActivePage('/login')">
-          <div class="mt-12 px-24">
-            <div class="flex flex-col justify-center px-6 py-12 lg:px-8">
-              <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-                <h2
-                  class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
-                >
-                  Belépés
-                </h2>
-                <div class="text-gray-400 text-sm text-center w-full">
-                  (admin@example.com / 123456)
-                </div>
-              </div>
-
-              <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <div class="space-y-6" action="#" method="POST">
-                  <div>
-                    <label
-                      for="email"
-                      class="block text-sm font-medium leading-6 text-gray-900"
-                      >Email</label
-                    >
-                    <div class="mt-2">
-                      <input
-                        x-model="loginEmail"
-                        id="email"
-                        name="email"
-                        type="email"
-                        autocomplete="email"
-                        required
-                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div class="flex items-center justify-between">
-                      <label
-                        for="password"
-                        class="block text-sm font-medium leading-6 text-gray-900"
-                        >Jelszó</label
-                      >
-                    </div>
-                    <div class="mt-2">
-                      <input
-                        x-model="loginPassword"
-                        id="password"
-                        name="password"
-                        type="password"
-                        autocomplete="current-password"
-                        required
-                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div
-                      x-show="loginError != ''"
-                      x-text="loginError"
-                      class="border-red-500 border rounded p-2 my-2 text-red-800"
-                    ></div>
-                    <button
-                      @click="login"
-                      class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                      Belépés
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </template>
-        <template x-if="isActivePage('/')">
-          <div class="relative isolate">
-            <svg
-              class="absolute inset-x-0 top-0 -z-10 h-[64rem] w-full stroke-gray-200 [mask-image:radial-gradient(32rem_32rem_at_center,white,transparent)]"
-              aria-hidden="true"
-            >
-              <defs>
-                <pattern
-                  id="1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84"
-                  width="200"
-                  height="200"
-                  x="50%"
-                  y="-1"
-                  patternUnits="userSpaceOnUse"
-                >
-                  <path d="M.5 200V.5H200" fill="none" />
-                </pattern>
-              </defs>
-              <svg x="50%" y="-1" class="overflow-visible fill-gray-50">
-                <path
-                  d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
-                  stroke-width="0"
-                />
-              </svg>
-              <rect
-                width="100%"
-                height="100%"
-                stroke-width="0"
-                fill="url(#1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84)"
-              />
+      </template>
+      <template x-if="isActivePage('/')">
+        <div class="relative isolate">
+          <svg
+            class="absolute inset-x-0 top-0 -z-10 h-[64rem] w-full stroke-gray-200 [mask-image:radial-gradient(32rem_32rem_at_center,white,transparent)]"
+            aria-hidden="true">
+            <defs>
+              <pattern id="1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84" width="200" height="200" x="50%" y="-1"
+                patternUnits="userSpaceOnUse">
+                <path d="M.5 200V.5H200" fill="none" />
+              </pattern>
+            </defs>
+            <svg x="50%" y="-1" class="overflow-visible fill-gray-50">
+              <path d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
+                stroke-width="0">
             </svg>
-            <div
-              class="absolute left-1/2 right-0 top-0 -z-10 -ml-24 transform-gpu overflow-hidden blur-3xl lg:ml-24 xl:ml-48"
-              aria-hidden="true"
-            >
-              <div
-                class="aspect-[801/1036] w-[50.0625rem] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
-                style="
+            <rect width="100%" height="100%" stroke-width="0" fill="url(#1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84)" />
+          </svg>
+          <div
+            class="absolute left-1/2 right-0 top-0 -z-10 -ml-24 transform-gpu overflow-hidden blur-3xl lg:ml-24 xl:ml-48"
+            aria-hidden="true">
+            <div class="aspect-[801/1036] w-[50.0625rem] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
+              style="
                   clip-path: polygon(
                     63.1% 29.5%,
                     100% 17.1%,
@@ -196,100 +139,56 @@
                     97.2% 52.8%,
                     63.1% 29.5%
                   );
-                "
-              ></div>
-            </div>
-            <div class="overflow-hidden">
-              <div
-                class="mx-auto max-w-7xl px-6 pb-32 sm:pt-60 lg:px-8 lg:pt-32"
-              >
-                <div
-                  class="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center"
-                >
+                "></div>
+          </div>
+          <div class="overflow-hidden">
+            <div class="mx-auto max-w-7xl px-6 pb-32 sm:pt-60 lg:px-8 lg:pt-32">
+              <div class="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
+                <div class="relative w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
+                  <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                    A siker kulcsa: hogyan csináljuk meg az informatika beadandót helyesen
+
+                  </h1>
+                  <p class="mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
+                    Egyének dinamikus csoportja vagyunk, akik szenvedélyesen foglalkoznak azzal, amit csinálnak és
+                    elkötelezettek vagyunk arra, hogy a legjobb eredményeket nyújtsuk
+                  </p>
+                </div>
+                <div class="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
                   <div
-                    class="relative w-full max-w-xl lg:shrink-0 xl:max-w-2xl"
-                  >
-                    <h1
-                      class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl"
-                    >
-                      A siker kulcsa: csináljuk meg a bevezetés az informatikába
-                      házit
-                    </h1>
-                    <p
-                      class="mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none"
-                    >
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Etiam a velit magna. Nunc in justo vestibulum, placerat
-                      diam in, laoreet sapien. Fusce dui ipsum, rhoncus nec
-                      accumsan a, aliquet id enim. Praesent et sapien varius,
-                      dictum tortor et, pellentesque nisi. Praesent in massa
-                      lectus. Morbi dignissim mauris eu sapien hendrerit, eu
-                      mollis sapien viverra. Proin lectus lorem, auctor lobortis
-                      mollis sit amet, gravida nec arcu. Aliquam est lorem,
-                      iaculis eget fermentum nec, ullamcorper eget diam.
-                    </p>
+                    class="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
+                    <div class="relative">
+                      <img src="kep5.png" alt=""
+                        class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg" />
+                      <div class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10">
+                      </div>
+                    </div>
                   </div>
-                  <div
-                    class="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0"
-                  >
-                    <div
-                      class="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80"
-                    >
-                      <div class="relative">
-                        <img
-                          src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&h=528&q=80"
-                          alt=""
-                          class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                        />
-                        <div
-                          class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10"
-                        ></div>
+                  <div class="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
+                    <div class="relative">
+                      <img src="kep1.webp" alt=""
+                        class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg" />
+                      <div class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10">
                       </div>
                     </div>
-                    <div
-                      class="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36"
-                    >
-                      <div class="relative">
-                        <img
-                          src="https://images.unsplash.com/photo-1485217988980-11786ced9454?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&h=528&q=80"
-                          alt=""
-                          class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                        />
-                        <div
-                          class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10"
-                        ></div>
-                      </div>
-                      <div class="relative">
-                        <img
-                          src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=focalpoint&fp-x=.4&w=396&h=528&q=80"
-                          alt=""
-                          class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                        />
-                        <div
-                          class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10"
-                        ></div>
+                    <div class="relative">
+                      <img src="kep2.jpg" alt=""
+                        class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg" />
+                      <div class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10">
                       </div>
                     </div>
-                    <div class="w-44 flex-none space-y-8 pt-32 sm:pt-0">
-                      <div class="relative">
-                        <img
-                          src="https://images.unsplash.com/photo-1670272504528-790c24957dda?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=left&w=400&h=528&q=80"
-                          alt=""
-                          class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                        />
-                        <div
-                          class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10"
-                        ></div>
+                  </div>
+                  <div class="w-44 flex-none space-y-8 pt-32 sm:pt-0">
+                    <div class="relative">
+                      <img src="kep3.jpg" alt=""
+                        class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg" />
+                      <div class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10">
                       </div>
-                      <div class="relative">
-                        <img
-                          src="https://images.unsplash.com/photo-1670272505284-8faba1c31f7d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&h=528&q=80"
-                          alt=""
-                          class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                        />
-                        <div
-                          class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10"
-                        ></div>
+                    </div>
+                    <div class="relative">
+                      <img src="kep4.jpg" alt=""
+                        class="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg" />
+                      <div class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10">
                       </div>
                     </div>
                   </div>
@@ -297,387 +196,304 @@
               </div>
             </div>
           </div>
-        </template>
+        </div>
+      </template>
 
-        <template x-if="isActivePage('/blog')">
-          <div class="mt-12 px-24">
-            <div class="mx-auto max-w-3xl text-base leading-7 text-gray-700">
-              <p class="text-base font-semibold leading-7 text-indigo-600">
-                Introducing
+      <template x-if="isActivePage('/blog')">
+        <div class="mt-12 px-24">
+          <div class="mx-auto max-w-3xl text-base leading-7 text-gray-700">
+            <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Azonnali határidővel, igényeidnek megfelelően összeállított projektfeladat elkészítése
+            </h1>
+            <p class="mt-6 text-xl leading-8">
+              Csapattagjaink valós életből vett gyakorló projekteken tanulnak meg csapatban hatékonyan együtt dolgozni.
+              A legtöbb esetben a csapattagok nem megválaszthatóak, ami már egy kezdő stresszes löketet ad a feladatnak,
+              extra komplikációként pedig egy olyan téma is bejöhet, amit esetleg nem a csoport szeretett volna
+              megkapni. Ám ezeken hamar túl kell lendülni a sikeres feladatvégzés érdekében! A projekt végrehajtása egy
+              sajátos tanulási technikát fejleszt, amely során a megismerés fő forrásává az önálló és a csoportos
+              tapasztalás válik. Fontos teendő a projekt elkezdése és a kutatómunka megkezdése előtt, a csapattagok
+              feladatainak igazságos elosztása. Valakinek (lehetőleg egy embernek) fel kell vennie a vezető szerepét, és
+              határozott döntéseket hoznia, különben megvan annak az esélye, hogy nem fog hatékonyan elkészülni időre a
+              projektfeladat. De mi egy teljes csapatot alkotunk!
+            </p>
+            <div class="mt-10 max-w-2xl">
+              <div class="text-xl text-gray-900"> A projektmunka céljai:</div>
+              <p>
+
+
+                <br />• háttérismeret rendszerezése (szakirodalom gyűjtés és összevetés)
+                <br />• leírás (a feladat, esetleg valamilyen folyamat pontos dokumentálása)
+                <br />• funkciókeresés (egy folyamat/jelenség funkciójának vizsgálata)
+                <br />• oknyomozás (folyamatot/jelenséget kiváltó okok feltárása)
+
+                <br /><br />
+              <div class="text-xl text-gray-900">A projektmunka jellemzői:</div>
+              <br />• problémafelvetés – mire vagyunk kíváncsiak
+              <br />• vizsgálati módszer – milyen eszközökkel kutatunk
+              <br />• adatrögzítés – például grafikonon, táblázatban, térképen
+              <br />• következtetés – magyarázat, beleértve esetleges kudarcot is
+              <br />• helyesírás!
+              <br />• koherencia – a gondolatmenet egységes-e, következetesség
+
+              <br /><br />Amint az látható, számos buktatója van a projektmunkának, főleg egyetemen/főiskolán, hiszen a
+              kapott téma, és az elvárás is magasabb, mint azt középiskolában megszokhattad. Azonban ezeknek a típusú
+              feladatoknak megvannak a maga előnyei is. Az iskolapadból kikerülve a legtöbb munkahelyen is bevett szokás
+              csapatban dolgozni. Az ilyen egyetemi feladatok pedig hozzászoktatnak és rutinossá tesznek, hogy
+              kikerülvén a nagyvilágba, már megálld a helyed. Gondolj tehát az projektmunkára úgy, mint egy szükséges
+              gyakorlatra, állj hozzá mindig pozitívan és próbáld meg kihozni belőle a legtöbbet!
+
               </p>
-              <h1
-                class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
-              >
-                JavaScript for Beginners
+              <br /><br />
+              <div class="text-2xl text-gray-900">Mikor van erre szükséged?</div>
+              <ul role="list" class="mt-8 max-w-xl space-y-8 text-gray-600">
+                <li class="flex gap-x-3">
+                  <svg class="mt-1 h-5 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor"
+                    aria-hidden="true">
+                    <path fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                      clip-rule="evenodd" />
+                  </svg>
+                  <span><strong class="font-semibold text-gray-900">Amikor az új projektedhez nincs elég erőforrásod
+                    </strong>
+                  </span>
+                </li>
+                <li class="flex gap-x-3">
+                  <svg class="mt-1 h-5 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor"
+                    aria-hidden="true">
+                    <path fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                      clip-rule="evenodd" />
+                  </svg>
+                  <span><strong class="font-semibold text-gray-900">Amikor jól felkészült juniorokra és tapasztalt
+                      szeniorokra egyaránt szükséged van egy nagyobb feladathoz.</strong>
+                  </span>
+                </li>
+                <li class="flex gap-x-3">
+                  <svg class="mt-1 h-5 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor"
+                    aria-hidden="true">
+                    <path fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                      clip-rule="evenodd" />
+                  </svg>
+                  <span><strong class="font-semibold text-gray-900">Amikor projekt elkészítési folyamatban menedzserre,
+                      tesztelőkre és rendszergazdára is szükséged van.</strong>
+                  </span>
+                </li>
+              </ul>
+              <p class="mt-8">
+                Végül megbeszéljük a határidőt és átadjuk Neked a kész projektmunkát!
+              </p>
+            </div>
+
+            <div class="mt-8">
+              <h1 class="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                Bemutató
               </h1>
-              <p class="mt-6 text-xl leading-8">
-                Aliquet nec orci mattis amet quisque ullamcorper neque, nibh
-                sem. At arcu, sit dui mi, nibh dui, diam eget aliquam. Quisque
-                id at vitae feugiat egestas ac. Diam nulla orci at in viverra
-                scelerisque eget. Eleifend egestas fringilla sapien.
+              <div class="w-full mt-2">
+                <iframe
+                  src="https://docs.google.com/presentation/d/e/2PACX-1vTIoyX6sz0K5NHJx1Iai4H2ibXXuSsjp9N6wWX4uF0z8lYddyhllOtNxIV3oVptaxKcEIiOXjAC3u3b/embed?start=false&loop=false&delayms=3000"
+                  frameborder="0" width="480" height="299" allowfullscreen="true" mozallowfullscreen="true"
+                  webkitallowfullscreen="true"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <template x-if="isActivePage('/uzenetek')">
+        <div class="mt-12 px-24">
+          <div class="space-y-12">
+            <div class="border-b border-gray-900/10 pb-12">
+              <h2 class="text-base font-semibold leading-7 text-gray-900">
+                Üzenet küldés
+              </h2>
+              <p class="mt-1 text-sm leading-6 text-gray-600">
+                Az üzenetek csak memóriában tárolódnak.
               </p>
-              <div class="mt-10 max-w-2xl">
-                <p>
-                  Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget
-                  risus enim. Mattis mauris semper sed amet vitae sed turpis id.
-                  Id dolor praesent donec est. Odio penatibus risus viverra
-                  tellus varius sit neque erat velit. Faucibus commodo massa
-                  rhoncus, volutpat. Dignissim sed eget risus enim. Mattis
-                  mauris semper sed amet vitae sed turpis id.
-                </p>
-                <ul role="list" class="mt-8 max-w-xl space-y-8 text-gray-600">
-                  <li class="flex gap-x-3">
-                    <svg
-                      class="mt-1 h-5 w-5 flex-none text-indigo-600"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                        clip-rule="evenodd"
-                      />
+
+              <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div class="col-span-full">
+                  <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Név</label>
+                  <div class="mt-2">
+                    <input type="text" x-model="formName" autocomplete="name"
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      placeholder="John Doe" />
+                  </div>
+                </div>
+
+                <div class="col-span-full">
+                  <label for="message" class="block text-sm font-medium leading-6 text-gray-900">Üzenet</label>
+                  <div class="mt-2">
+                    <textarea x-model="formMessage" id="message" name="message" rows="3"
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 flex items-center justify-end gap-x-6">
+            <div x-text="formResultMessage"></div>
+            <button type="submit" @click="sendMessage"
+              class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              Üzenet küldés
+            </button>
+          </div>
+        </div>
+      </template>
+
+      <template x-if="isActivePage('/admin')">
+        <div class="mt-12 px-24">
+          <div class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
+            Kapcsolat
+          </div>
+          <ul>
+            <template x-for="item in messages">
+              <li role="list" class="divide-y divide-gray-100">
+                <div class="flex gap-x-4 py-5">
+                  <div class="h-12 w-12 flex-none rounded-full bg-gray-50" alt="">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="{1.5}"
+                      stroke="currentColor" className="size-6">
+                      <path strokeLinecap="round" strokeLinejoin="round"
+                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                     </svg>
-                    <span
-                      ><strong class="font-semibold text-gray-900"
-                        >Data types.</strong
-                      >
-                      Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                      Maiores impedit perferendis suscipit eaque, iste dolor
-                      cupiditate blanditiis ratione.</span
-                    >
+                  </div>
+                  <div class="flex-auto">
+                    <div class="flex items-baseline justify-between gap-x-4">
+                      <p class="text-sm font-semibold leading-6 text-gray-900" x-text="item.name"></p>
+                    </div>
+                    <p class="mt-1 line-clamp-2 text-sm leading-6 text-gray-600" x-text="item.message"></p>
+                  </div>
+                </div>
+              </li>
+            </template>
+
+          </ul>
+        </div>
+      </template>
+      <template x-if="isActivePage('/team')">
+        <div class="mt-12 px-24">
+          <div class="border-b border-gray-900/10 pb-12">
+            <div class="bg-white py-24 sm:py-32">
+              <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-2xl lg:mx-0">
+                  <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+
+                    A Csapat
+                  </h2>
+                  <p class="mt-6 text-lg leading-8 text-gray-600">
+                    Egyének dinamikus csoportja vagyunk, akik szenvedélyesen
+                    foglalkoznak azzal, amit csinálunk, és elkötelezettek az
+                    ügyfeleink számára, hogy a legjobb eredményeket nyújtsák.
+                  </p>
+                </div>
+                <ul role="list"
+                  class="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+                  <li>
+                    <img class="aspect-[3/2] w-full rounded-2xl object-cover" src="Anita.jpg" alt="" />
+                    <h3 class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900">
+                      Anita
+                    </h3>
+                    <p class="text-base leading-7 text-gray-600">
+                      Front-end Developer
+                    </p>
                   </li>
-                  <li class="flex gap-x-3">
-                    <svg
-                      class="mt-1 h-5 w-5 flex-none text-indigo-600"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                    <span
-                      ><strong class="font-semibold text-gray-900"
-                        >Loops.</strong
-                      >
-                      Anim aute id magna aliqua ad ad non deserunt sunt. Qui
-                      irure qui lorem cupidatat commodo.</span
-                    >
+
+                  <li>
+                    <img class="aspect-[3/2] w-full rounded-2xl object-cover" src="Adri.jpg" alt="" />
+                    <h3 class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900">
+                      Adri
+                    </h3>
+                    <p class="text-base leading-7 text-gray-600">
+                      Front-end Developer
+                    </p>
                   </li>
-                  <li class="flex gap-x-3">
-                    <svg
-                      class="mt-1 h-5 w-5 flex-none text-indigo-600"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                    <span
-                      ><strong class="font-semibold text-gray-900"
-                        >Events.</strong
-                      >
-                      Ac tincidunt sapien vehicula erat auctor pellentesque
-                      rhoncus. Et magna sit morbi lobortis.</span
-                    >
+
+                  <li>
+                    <img class="aspect-[3/2] w-full rounded-2xl object-cover" src="Milan.jpg" alt="" />
+                    <h3 class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900">
+                      Milan
+                    </h3>
+                    <p class="text-base leading-7 text-gray-600">
+                      Front-end Developer
+                    </p>
                   </li>
                 </ul>
-                <p class="mt-8">
-                  Et vitae blandit facilisi magna lacus commodo. Vitae sapien
-                  duis odio id et. Id blandit molestie auctor fermentum
-                  dignissim. Lacus diam tincidunt ac cursus in vel. Mauris
-                  varius vulputate et ultrices hac adipiscing egestas. Iaculis
-                  convallis ac tempor et ut. Ac lorem vel integer orci.
-                </p>
-                <h2
-                  class="mt-16 text-2xl font-bold tracking-tight text-gray-900"
-                >
-                  From beginner to expert in 3 hours
-                </h2>
-                <p class="mt-6">
-                  Id orci tellus laoreet id ac. Dolor, aenean leo, ac etiam
-                  consequat in. Convallis arcu ipsum urna nibh. Pharetra,
-                  euismod vitae interdum mauris enim, consequat vulputate nibh.
-                  Maecenas pellentesque id sed tellus mauris, ultrices mauris.
-                  Tincidunt enim cursus ridiculus mi. Pellentesque nam sed
-                  nullam sed diam turpis ipsum eu a sed convallis diam.
-                </p>
-                <figure class="mt-10 border-l border-indigo-600 pl-9">
-                  <blockquote class="font-semibold text-gray-900">
-                    <p>
-                      “Vel ultricies morbi odio facilisi ultrices accumsan donec
-                      lacus purus. Lectus nibh ullamcorper ac dictum justo in
-                      euismod. Risus aenean ut elit massa. In amet aliquet eget
-                      cras. Sem volutpat enim tristique.”
-                    </p>
-                  </blockquote>
-                  <figcaption class="mt-6 flex gap-x-4">
-                    <img
-                      class="h-6 w-6 flex-none rounded-full bg-gray-50"
-                      src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      alt=""
-                    />
-                    <div class="text-sm leading-6">
-                      <strong class="font-semibold text-gray-900"
-                        >Maria Hill</strong
-                      >
-                      – Marketing Manager
-                    </div>
-                  </figcaption>
-                </figure>
-                <p class="mt-10">
-                  Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget
-                  risus enim. Mattis mauris semper sed amet vitae sed turpis id.
-                  Id dolor praesent donec est. Odio penatibus risus viverra
-                  tellus varius sit neque erat velit.
-                </p>
-              </div>
-              <figure class="mt-16">
-                <img
-                  class="aspect-video rounded-xl bg-gray-50 object-cover"
-                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=facearea&w=1310&h=873&q=80&facepad=3"
-                  alt=""
-                />
-                <figcaption
-                  class="mt-4 flex gap-x-2 text-sm leading-6 text-gray-500"
-                >
-                  <svg
-                    class="mt-0.5 h-5 w-5 flex-none text-gray-300"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                  Faucibus commodo massa rhoncus, volutpat.
-                </figcaption>
-              </figure>
-              <div class="mt-16 max-w-2xl">
-                <h2 class="text-2xl font-bold tracking-tight text-gray-900">
-                  Everything you need to get up and running
-                </h2>
-                <p class="mt-6">
-                  Purus morbi dignissim senectus mattis adipiscing. Amet, massa
-                  quam varius orci dapibus volutpat cras. In amet eu ridiculus
-                  leo sodales cursus tristique. Tincidunt sed tempus ut viverra
-                  ridiculus non molestie. Gravida quis fringilla amet eget dui
-                  tempor dignissim. Facilisis auctor venenatis varius nunc,
-                  congue erat ac. Cras fermentum convallis quam.
-                </p>
-                <p class="mt-8">
-                  Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget
-                  risus enim. Mattis mauris semper sed amet vitae sed turpis id.
-                  Id dolor praesent donec est. Odio penatibus risus viverra
-                  tellus varius sit neque erat velit.
-                </p>
               </div>
             </div>
           </div>
-        </template>
-
-        <template x-if="isActivePage('/uzenetek')">
-          <div class="mt-12 px-24">
-            <div class="space-y-12">
-              <div class="border-b border-gray-900/10 pb-12">
-                <h2 class="text-base font-semibold leading-7 text-gray-900">
-                  Üzenet küldés
-                </h2>
-                <p class="mt-1 text-sm leading-6 text-gray-600">
-                  Az üzenetek csak memóriában tárolódnak.
-                </p>
-
-                <div
-                  class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
-                >
-                  <div class="col-span-full">
-                    <label
-                      for="name"
-                      class="block text-sm font-medium leading-6 text-gray-900"
-                      >Név</label
-                    >
-                    <div class="mt-2">
-                      <input
-                        type="text"
-                        x-model="formName"
-                        autocomplete="name"
-                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        placeholder="John Doe"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="col-span-full">
-                    <label
-                      for="message"
-                      class="block text-sm font-medium leading-6 text-gray-900"
-                      >Üzenet</label
-                    >
-                    <div class="mt-2">
-                      <textarea
-                        x-model="formMessage"
-                        id="message"
-                        name="message"
-                        rows="3"
-                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      ></textarea>
-                    </div>
-                  </div>
+        </div>
+      </template>
+      <template x-if="isActivePage('/lista')">
+        <div class="mt-12 px-24">
+          <div class="border-b border-gray-900/10 pb-12">
+            <div class="bg-white py-24 sm:py-32">
+              <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-2xl lg:mx-0">
+                  <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                    Árlistánk
+                  </h2>
+                  <p class="mt-6 text-lg leading-8 text-gray-600">
+                    Magas színvonal, elérhető áron!
+                  </p>
                 </div>
-              </div>
-            </div>
-
-            <div class="mt-6 flex items-center justify-end gap-x-6">
-              <div x-text="formResultMessage"></div>
-              <button
-                type="submit"
-                @click="sendMessage"
-                class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Üzenet küldés
-              </button>
-            </div>
-          </div>
-        </template>
-
-        <template x-if="isActivePage('/team')">
-          <div class="mt-12 px-24">
-            <div class="border-b border-gray-900/10 pb-12">
-              <div class="bg-white py-24 sm:py-32">
-                <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                  <div class="mx-auto max-w-2xl lg:mx-0">
-                    <h2
-                      class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
-                    >
-                      A Csapat
-                    </h2>
-                    <p class="mt-6 text-lg leading-8 text-gray-600">
-                      Egyének dinamikus csoportja vagyunk, akik szenvedélyesen
-                      foglalkoznak azzal, amit csinálunk, és elkötelezettek az
-                      ügyfeleink számára, hogy a legjobb eredményeket nyújtsák.
+                <ul role="list"
+                  class="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+                  <li>
+                    <h3 class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900">
+                      Anita
+                    </h3>
+                    <h3 class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900">
+                      Főbb területei: Word, Exel
+                    </h3>
+                    <p class="text-base leading-7 text-gray-600">
+                      Online konzultációja 7000 Ft/óra
                     </p>
-                  </div>
-                  <ul
-                    role="list"
-                    class="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3"
-                  >
-                    <li>
-                      <img
-                        class="aspect-[3/2] w-full rounded-2xl object-cover"
-                        src="https://images.unsplash.com/photo-1509783236416-c9ad59bae472?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80"
-                        alt=""
-                      />
-                      <h3
-                        class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900"
-                      >
-                        Anita
-                      </h3>
-                      <p class="text-base leading-7 text-gray-600">
-                        Front-end Developer
-                      </p>
-                    </li>
+                    <p class="text-base leading-7 text-gray-600">
+                      Személyes konzultációja 8000 Ft/óra + utazási költség
+                    </p>
+                  </li>
 
-                    <li>
-                      <img
-                        class="aspect-[3/2] w-full rounded-2xl object-cover"
-                        src="https://images.unsplash.com/photo-1507101105822-7472b28e22ac?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80"
-                        alt=""
-                      />
-                      <h3
-                        class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900"
-                      >
-                        Adri
-                      </h3>
-                      <p class="text-base leading-7 text-gray-600">
-                        Front-end Developer
-                      </p>
-                    </li>
+                  <li>
+                    <h3 class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900">
+                      Adri
+                    </h3>
+                    <h3 class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900">
+                      Főbb területei: Online űrlapok/hivatalos dokumentációk, Kép szerkesztés
+                    </h3>
+                    <p class="text-base leading-7 text-gray-600">
+                      Online konzultációja 7000 Ft/óra
+                    </p>
+                    <p class="text-base leading-7 text-gray-600"></p>
+                    Személyes konzultációja 8000 Ft/óra + utazási költség
+                    </p>
+                  </li>
 
-                    <li>
-                      <img
-                        class="aspect-[3/2] w-full rounded-2xl object-cover"
-                        src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                      <h3
-                        class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900"
-                      >
-                        Milan
-                      </h3>
-                      <p class="text-base leading-7 text-gray-600">
-                        Front-end Developer
-                      </p>
-                    </li>
-                  </ul>
-                </div>
+                  <li>
+                    <h3 class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900">
+                      Milan
+                    </h3>
+                    <h3 class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900">
+                      Főbb területei: Web fejlesztés, Programozás
+                    </h3>
+                    <p class="text-base leading-7 text-gray-600">
+                      Online konzultációja 10.000 Ft/óra
+                    </p>
+                    <p class="text-base leading-7 text-gray-600"></p>
+                    Személyes konzultációja 12.000 Ft/óra + utazási költség
+                    </p>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
-        </template>
+        </div>
+      </template>
 
-        <template x-if="isActivePage('/admin')">
-          <div class="mt-12 px-24">
-            <div
-              class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100"
-            >
-              Kapcsolat
-            </div>
-            <ul>
-              <template x-for="item in messages">
-                <li role="list" class="divide-y divide-gray-100">
-                  <div class="flex gap-x-4 py-5">
-                    <div
-                      class="h-12 w-12 flex-none rounded-full bg-gray-50"
-                      alt=""
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="{1.5}"
-                        stroke="currentColor"
-                        className="size-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                        />
-                      </svg>
-                    </div>
-                    <div class="flex-auto">
-                      <div class="flex items-baseline justify-between gap-x-4">
-                        <p
-                          class="text-sm font-semibold leading-6 text-gray-900"
-                          x-text="item.name"
-                        ></p>
-                      </div>
-                      <p
-                        class="mt-1 line-clamp-2 text-sm leading-6 text-gray-600"
-                        x-text="item.message"
-                      ></p>
-                    </div>
-                  </div>
-                </li>
-              </template>
-            </ul>
-          </div>
-        </template>
-      </div>
     </div>
+  </div>
 
-    <script src="app.js"></script>
-  </body>
+  <script src="app.js"></script>
+</body>
+
 </html>

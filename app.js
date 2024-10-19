@@ -52,7 +52,7 @@ document.addEventListener("alpine:init", () => {
         this.formResultMessage = "A nevet és az üzenetet kötelező kitölteni!";
         return;
       }
-      this.messages.push({ name: this.formName, message: this.formMessage });
+      this.messages.unshift({ name: this.formName, message: this.formMessage });
 
       this.formName = "";
       this.formMessage = "";
